@@ -10,6 +10,7 @@
     "vite": "^2.6.4"
   },
   "dependencies": {
-    "three": "^0.133.1"
+    "three": "^0.133.1",
+    "troika-three-text": "^0.43.1-alpha.0"
   }
 }

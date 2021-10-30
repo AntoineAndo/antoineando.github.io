@@ -1,16 +1,26 @@
 import './style.css'
 
-import * as THREE from 'three';
-import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import moonTexture from './tex/moon/moon_map.jpg';
+import moonBump from './tex/moon/moon_displacement.jpg';
+import spaceFontRegular from './fonts/Space_Mono/SpaceMono-Regular.ttf';
+import spaceFontBold from './fonts/Space_Mono/SpaceMono-Bold.ttf';
+import newSpaceFont from './fonts/SpaceSurfer_Demo.ttf';
+
+import * as THREE from './node_modules/three/build/three.module';
+import { TTFLoader } from './node_modules/three/examples/jsm/loaders/TTFLoader';
+import { FontLoader } from './node_modules/three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from './node_modules/three/examples/jsm/geometries/TextGeometry';
+import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
+
+import { Text, preloadFont } from './node_modules/troika-three-text/dist/troika-three-text.esm';
 
 const scene = new THREE.Scene();
 
 const renderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector("#canvas"),
+	antialias: true
 });
+const canvas = renderer.domElement;
 
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -22,15 +32,14 @@ camera.position.x = 0;
 camera.position.y = 0;
 camera.position.z = 50;
 
-
 var animationTriggered = false;
 
 
 //MOON
 const radius = 30;
 const detail = 100;
-const moon_texture = new THREE.TextureLoader().load('tex/moon/moon_map.jpg');
-const moon_displacement = new THREE.TextureLoader().load('tex/moon/moon_displacement.jpg');
+const moon_texture = new THREE.TextureLoader().load(moonTexture);
+const moon_displacement = new THREE.TextureLoader().load(moonBump);
 const sphereGeometry = new THREE.IcosahedronGeometry(radius, detail);
 const moonTextureOptions = {
 	map: moon_texture,
@@ -79,7 +88,7 @@ scene.add( dot );
 const light = new THREE.DirectionalLight('white', 1.5);
 const lightHelper = new THREE.DirectionalLightHelper(light, 10);
 lightHelper.position.set(0,0,33);
-light.position.set(30,0,20);
+light.position.set(40,0,20);
 scene.add(light);
 //scene.add(lightHelper);
 
@@ -89,30 +98,62 @@ scene.add(light);
 
 
 //TEXT
+/*
 const loader = new TTFLoader();
 const fontLoader = new FontLoader();
 var font;
-loader.load('./fonts/Space_Mono/SpaceMono-Regular.ttf',(fnt) => {
+loader.load(spaceFont,(fnt) => {
 	font = fontLoader.parse(fnt)
 
-	const textGeometry = new TextGeometry('Antoine ANDO', {
+	const titleGeometry = new TextGeometry('Antoine ANDO', {
 		font: font,
 		size: 2.7,
 		height: 0,
 		curveSegments: 100,
 	});
+	const subtitleGeometry = new TextGeometry('Fullstack JS Developer', {
+		font: font,
+		size: 1.45,
+		height: 0,
+		curveSegments: 100,
+	});
 
-	var textMesh1 = new THREE.Mesh( textGeometry, new THREE.MeshPhongMaterial( { color: 'red', flatShading: true }));
-	textMesh1.position.set(-3.5,0,32);
+	var titleMaterial = new THREE.MeshBasicMaterial( { color: 'red', flatShading: true });
+	const titleMesh = new THREE.Mesh( titleGeometry, titleMaterial);
+	const subtitleMesh = new THREE.Mesh( subtitleGeometry, new THREE.MeshPhongMaterial( { color: 'white', flatShading: true }));
+	titleMesh.position.set(-3.5,0,32);
+	subtitleMesh.position.set(-3.5,-3,32);
 		
-	scene.add(textMesh1);
+	scene.add(titleMesh);
+	scene.add(subtitleMesh);
 })
+*/
+
+const titleText = new Text();
+scene.add(titleText);
+titleText.text = 'ANTOINE ANDO'
+titleText.font = spaceFontBold;
+titleText.fontSize = 3
+titleText.position.set(0,4,32);
+titleText.color = '#FC3D21';
+titleText.sync()
+
+const subtitleText = new Text();
+scene.add(subtitleText);
+subtitleText.text = 'Fullstack JS Developer'
+subtitleText.font = spaceFontRegular;
+subtitleText.fontSize = 1.62
+subtitleText.position.set(0,1,32);
+subtitleText.color = 'white';
+//subtitleText.strokeColor = 'black';
+//subtitleText.strokeWidth = 0.1;
+subtitleText.sync()
 
 
 
 var t = 0, dt = 0.005,                   // t (dt delta for demo)
     a = {x: camera.position.x, y: camera.position.y, z: camera.position.z},          // start position
-    b = {x: -25, y: -20, z: 45};
+    b = {x: -10, y: -10, z: 45};
 
 function animate() {
 	//requestAnimationFrame( animate );
@@ -160,4 +201,20 @@ function triggerAnimation() {
 function ease(t) { return t<0.5 ? 2*t*t : -1+(4-2*t)*t}
 function lerp(a, b, t) {return a + (b - a) * t}
 
-animate();
+
+
+preloadFont({
+	font: 'spaceFont',
+	characters: 'abcdefghijklmnopqrstuvwxyz'
+},()=>{
+	animate();
+});
+
+
+window.addEventListener("resize", ()=>{
+	//renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	camera.aspect = canvas.clientWidth / canvas.clientHeight;
+	camera.updateProjectionMatrix();
+	console.log("resize")
+});
