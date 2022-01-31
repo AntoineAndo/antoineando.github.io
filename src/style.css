@@ -70,8 +70,6 @@ canvas {
 section {
 	height: 100%;
 	width: 100%;
-	padding-top: 50px;
-	padding-left: 100px;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -82,30 +80,30 @@ section {
 	justify-content: space-between;
 }
 
+section h3 {
+	font-size: 2.2em;
+}
+
+section #content {
+	margin-top: 50px;
+	margin-left: 100px;
+}
+
+section #content .info {
+	font-size: 1.1em;
+}
+
 section>div{
 	height: 100%;
 	width: 42%;
 	opacity: 1;
 	transition: opacity 0.5s;
-}
-
-section h3 {
-	font-size: 2.2em;
-}
-
-section>div{
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
 }
-
-section p {
-	font-size: 1.4em;
-}
-
 section ul {
 	list-style-type: circle;
-	font-size: 1.4em;
 }
 
 section ul li{

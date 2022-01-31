@@ -64,7 +64,8 @@ if (isMobile) {
 			},
 		},
 		statusText: {
-			text: 'Available for freelance work starting Nov 2021',
+			//text: 'Available for freelance work starting Nov 2021',
+			text: 'Currently not available',
 			fontSize: 2,
 			maxWidth: 29,
 			position: {
@@ -109,7 +110,8 @@ if (isMobile) {
 			},
 		},
 		statusText: {
-			text: 'Available for freelance work starting Nov 2021',
+			//text: 'Available for freelance work starting Nov 2021',
+			text: 'Currently not available',
 			fontSize: 0.7,
 			maxWidth: 6,
 			position: {
